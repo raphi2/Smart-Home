@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="months">
+        <item>März 2017</item>
+        <item>Februar 2017</item>
+    </string-array>
+</resources>
