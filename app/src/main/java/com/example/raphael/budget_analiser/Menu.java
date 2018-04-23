@@ -57,6 +57,8 @@ public class Menu extends AppCompatActivity {
 
     int temp;
     int humid;
+    int tempout;
+    int pressure;
 
     List<String> kategorie = new ArrayList<String>();
 
@@ -76,6 +78,7 @@ public class Menu extends AppCompatActivity {
         /**Deklarationen**/
         Button KategorieBetaBtn = (Button) findViewById(R.id.AusgabenKatBtn);
         TextView Temperature = (TextView) findViewById(R.id.TemperaturTV);
+        TextView Temperatureout = (TextView) findViewById(R.id.tempoutTV);
 
 
         /**Kategorie Beta Butn Listener**/
@@ -89,6 +92,14 @@ public class Menu extends AppCompatActivity {
 
         /**Refresh Beta Butn Listener**/
         Temperature.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getResultsFromApi();
+            }
+        });
+
+        /**Refresh Beta Butn Listener**/
+        Temperatureout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getResultsFromApi();
@@ -351,7 +362,7 @@ public class Menu extends AppCompatActivity {
             //String spreadsheetId = "1XE7et3G_zk8JpXK0Wp2o5x8T9Z-FC3eAmHsr3tYhMRM";
             //String spreadsheetId = "1jVEJ6wZVH0fGbNt7saYFT-ifKaLT2U5dMdqPMF29yKM"; // Februar
             String spreadsheetId =   "1lyaa75_iW3i8KRTV3rpXsREfPEJ3pNH1s4gwpfp3I_4";
-            String range = "Tabellenblatt1!A:B";
+            String range = "Tabellenblatt1!A:D";
 
             ValueRange response = this.mService.spreadsheets().values().get(spreadsheetId, range).execute();
             List<List<Object>> values = response.getValues();
@@ -359,6 +370,8 @@ public class Menu extends AppCompatActivity {
                 for (List row : values) {
                     temp = Integer.parseInt(row.get(0) + "");
                     humid = Integer.parseInt(row.get(1) + "");
+                    tempout = Integer.parseInt(row.get(2) + "");
+                    pressure = Integer.parseInt(row.get(3) + "");
                 }
             }
 
@@ -377,11 +390,17 @@ public class Menu extends AppCompatActivity {
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
             TextView Temperature = (TextView) findViewById(R.id.TemperaturTV);
+            TextView Temperatureout = (TextView) findViewById(R.id.tempoutTV);
             ImageView tempsymb = (ImageView) findViewById(R.id.tempsymbol);
+            ImageView tempsymb2 = (ImageView) findViewById(R.id.tempsymbol2);
             ImageView humsymb = (ImageView) findViewById(R.id.humiditysymbol);
+            ImageView pressuresymb = (ImageView) findViewById(R.id.pressuresymb);
             Temperature.setText("" + temp + "°C" + "\n" + humid + "%");
+            Temperatureout.setText("" + tempout + "°C" + "\n" + pressure + "Pa");
             tempsymb.setVisibility(View.VISIBLE);
+            tempsymb2.setVisibility(View.VISIBLE);
             humsymb.setVisibility(View.VISIBLE);
+            pressuresymb.setVisibility(View.VISIBLE);
             if (output == null || output.size() == 0) {
                 mOutputText.setText("No results returned.");
             } else {
